@@ -24,7 +24,7 @@ def my_prediction(encoded_month,encoded_flat_type,encoded_storey_range,encoded_t
     trim_data.head(5)
     pipeline = ColumnTransformer([ ("o", OrdinalEncoder(), ["month","flat_type","storey_range"]), ("n", OneHotEncoder(), ["town", "flat_model"]), ], remainder='passthrough')
 
-    X_error = pipeline.fit_transform(trim_data.drop(["resale_price"], axis=1))
+    X = pipeline.fit_transform(trim_data.drop(["resale_price"], axis=1))
     y = trim_data["resale_price"]
 
     col_name = ["month","type","storey","AMK","BED","BIS","BBT","BMH","BPJ",
@@ -35,7 +35,7 @@ def my_prediction(encoded_month,encoded_flat_type,encoded_storey_range,encoded_t
     "Multi Gen","New Gen","Premium Apt","Premium Apt Loft",
     "Premium M","Simplified","Standard","Terrace","Type S1",
     "Type S2","Area","Lease"]
-    df_X = pd.DataFrame(X_error.toarray(),columns=col_name)
+    df_X = pd.DataFrame(X.toarray(),columns=col_name)
     df_Xy = df_X.assign(resale_price = y)
     df_y = df_Xy.resale_price
 
@@ -51,23 +51,23 @@ def my_prediction(encoded_month,encoded_flat_type,encoded_storey_range,encoded_t
 
     pr = LinearRegression().fit(X_poly, y_train)
 
-#     X_inp = [[0 for x in range(51)]]
-#     X_inp[0][0] = encoded_month 
-#     X_inp[0][1] = encoded_flat_type 
-#     X_inp[0][2] = encoded_storey_range 
-#     X_inp[0][encoded_town] = 1 
-#     X_inp[0][encoded_flat_model] = 1
-#     X_inp[0][49] = selected_fa
-#     X_inp[0][50] = selected_lease 
-
     X_inp = [[0 for x in range(51)]]
-    X_inp[0][0] = 54 
-    X_inp[0][1] = 4 
-    X_inp[0][2] = 2 
-    X_inp[0][11] = 1 
-    X_inp[0][41] = 1
-    X_inp[0][49] = 123
-    X_inp[0][50] = 1998 
+    X_inp[0][0] = encoded_month 
+    X_inp[0][1] = encoded_flat_type 
+    X_inp[0][2] = encoded_storey_range 
+    X_inp[0][encoded_town] = 1 
+    X_inp[0][encoded_flat_model] = 1
+    X_inp[0][49] = selected_fa
+    X_inp[0][50] = selected_lease 
+
+#     X_inp = [[0 for x in range(51)]]
+#     X_inp[0][0] = 54 
+#     X_inp[0][1] = 4 
+#     X_inp[0][2] = 2 
+#     X_inp[0][11] = 1 
+#     X_inp[0][41] = 1
+#     X_inp[0][49] = 123
+#     X_inp[0][50] = 1998 
 
     test= pd.DataFrame(X_inp, columns = col_name)
     X_test_poly = poly_features.fit_transform(X_test)
@@ -187,31 +187,31 @@ from sklearn.preprocessing import OneHotEncoder
 
 #ORDINAL ENCODER FOR YYMM
 encoder = OrdinalEncoder()
-encoder.fit_transform(data[["month"]])
+encoder.fit_transform(data[["month"]].values)
 encoded_month = encoder.transform([[selected_yymm]])
 encoded_month = int(encoded_month[0][0])
 
 #ORDINAL ENCODER FOR STOREY RANGE
 encoder = OrdinalEncoder()
-encoder.fit_transform(data[["storey_range"]])
+encoder.fit_transform(data[["storey_range"]].values)
 encoded_storey_range = encoder.transform([[selected_storey_range]])
 encoded_storey_range = int(encoded_storey_range[0][0])
 
 #ORDINAL ENCODER FOR FLAT TYPE
 encoder = OrdinalEncoder()
-encoder.fit_transform(data[["flat_type"]])
+encoder.fit_transform(data[["flat_type"]].values)
 encoded_flat_type = encoder.transform([[selected_flat_type]])
 encoded_flat_type = int(encoded_flat_type[0][0])
 
 #ORDINAL ENCODER FOR TOWN
 encoder = OrdinalEncoder()
-encoder.fit_transform(data[["town"]])
+encoder.fit_transform(data[["town"]].values)
 encoded_town = encoder.transform([[selected_town]])
 encoded_town=int(encoded_town[0][0])+3
 
 #ORDINAL ENCODER FOR FLAT MODEL
 encoder = OrdinalEncoder()
-encoder.fit_transform(data[["flat_model"]])
+encoder.fit_transform(data[["flat_model"]].values)
 encoded_flat_model = encoder.transform([[selected_flat_model]])
 encoded_flat_model=int(encoded_flat_model[0][0])+29
 
