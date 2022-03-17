@@ -47,9 +47,9 @@ def my_prediction(encoded_month,encoded_flat_type,encoded_storey_range,encoded_t
     y_test = df_y[~mask]
 
     poly_features = PolynomialFeatures(degree=2, include_bias=False)
-    X_poly = poly_features.fit_transform(X_train)
+    X_poly = poly_features.fit_transform(X_train.values)
 
-    pr = LinearRegression().fit(X_poly, y_train)
+    pr = LinearRegression().fit(X_poly, y_train.values)
 
     X_inp = [[0 for x in range(51)]]
     X_inp[0][0] = encoded_month 
@@ -70,10 +70,10 @@ def my_prediction(encoded_month,encoded_flat_type,encoded_storey_range,encoded_t
     # X_inp[0][50] = 1998 
 
     test= pd.DataFrame(X_inp, columns = col_name)
-    X_test_poly = poly_features.fit_transform(X_test)
-    X_input = poly_features.fit_transform(test)
+    X_test_poly = poly_features.fit_transform(X_test.values)
+    X_input = poly_features.fit_transform(test.values)
 
-    rr = Ridge(alpha=0.001).fit(X_poly,y_train)
+    rr = Ridge(alpha=0.001).fit(X_poly,y_train.values)
     pred_rr = rr.predict(X_input)
     return pred_rr[0]
 
@@ -220,7 +220,7 @@ encoded_flat_model=int(encoded_flat_model[0][0])+29
 predict_button=0
 st.write('Predict HDB Resale Price for ', selected_yymm, "period, ", selected_town, " ", selected_fa, "SQM, ", selected_flat_type," ",selected_flat_model," ",selected_storey_range, "storey ", selected_lease, "lease?")
 if st.button('Predict'):
-    predict_button=1;
+    predict_button=1
     
 
 #############BUTTON PREDICT
