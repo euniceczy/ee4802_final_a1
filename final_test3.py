@@ -24,7 +24,7 @@ def my_prediction(encoded_month,encoded_flat_type,encoded_storey_range,encoded_t
     trim_data.head(5)
     pipeline = ColumnTransformer([ ("o", OrdinalEncoder(), ["month","flat_type","storey_range"]), ("n", OneHotEncoder(), ["town", "flat_model"]), ], remainder='passthrough')
 
-    X = pipeline.fit_transform(trim_data.drop(["resale_price"], axis=1))
+    X_error = pipeline.fit_transform(trim_data.drop(["resale_price"], axis=1))
     y = trim_data["resale_price"]
 
     col_name = ["month","type","storey","AMK","BED","BIS","BBT","BMH","BPJ",
@@ -35,7 +35,7 @@ def my_prediction(encoded_month,encoded_flat_type,encoded_storey_range,encoded_t
     "Multi Gen","New Gen","Premium Apt","Premium Apt Loft",
     "Premium M","Simplified","Standard","Terrace","Type S1",
     "Type S2","Area","Lease"]
-    df_X = pd.DataFrame(X.toarray(),columns=col_name)
+    df_X = pd.DataFrame(X_error.toarray(),columns=col_name)
     df_Xy = df_X.assign(resale_price = y)
     df_y = df_Xy.resale_price
 
