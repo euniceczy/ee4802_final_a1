@@ -5,6 +5,9 @@ import pydeck as pdk
 from streamlit_folium import folium_static
 import folium
 
+import warnings
+warnings.filterwarnings("ignore")
+
 @st.cache 
 def my_prediction(encoded_month,encoded_flat_type,encoded_storey_range,encoded_town,encoded_flat_model,selected_fa,selected_lease):
     import pandas as pd
