@@ -51,14 +51,23 @@ def my_prediction(encoded_month,encoded_flat_type,encoded_storey_range,encoded_t
 
     pr = LinearRegression().fit(X_poly, y_train)
 
+#     X_inp = [[0 for x in range(51)]]
+#     X_inp[0][0] = encoded_month 
+#     X_inp[0][1] = encoded_flat_type 
+#     X_inp[0][2] = encoded_storey_range 
+#     X_inp[0][encoded_town] = 1 
+#     X_inp[0][encoded_flat_model] = 1
+#     X_inp[0][49] = selected_fa
+#     X_inp[0][50] = selected_lease 
+
     X_inp = [[0 for x in range(51)]]
-    X_inp[0][0] = encoded_month 
-    X_inp[0][1] = encoded_flat_type 
-    X_inp[0][2] = encoded_storey_range 
-    X_inp[0][encoded_town] = 1 
-    X_inp[0][encoded_flat_model] = 1
-    X_inp[0][49] = selected_fa
-    X_inp[0][50] = selected_lease 
+    X_inp[0][0] = 54 
+    X_inp[0][1] = 4 
+    X_inp[0][2] = 2 
+    X_inp[0][11] = 1 
+    X_inp[0][41] = 1
+    X_inp[0][49] = 123
+    X_inp[0][50] = 1998 
 
     test= pd.DataFrame(X_inp, columns = col_name)
     X_test_poly = poly_features.fit_transform(X_test)
