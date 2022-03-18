@@ -16,7 +16,7 @@ def load_data():
     return trim_data
 
 data=load_data()
-@st.cache 
+# @st.cache 
 def my_prediction(data,encoded_month,encoded_flat_type,encoded_storey_range,encoded_town,encoded_flat_model,selected_fa,selected_lease):
     import pandas as pd
     import numpy as np
@@ -239,6 +239,6 @@ if predict_button==1:
     estimated_price = '{:,.2f}'.format(estimated_price)
     st.success('Success!')
     st.header('Predicted HDB Resale Price is **SGD$%s**' % estimated_price)
-    st.experimental_singleton.clear()
+#     st.experimental_singleton.clear()
 #     st.experimental_memo.clear()
     predict_button=0
