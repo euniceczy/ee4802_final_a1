@@ -73,7 +73,7 @@ def my_prediction(encoded_month,encoded_flat_type,encoded_storey_range,encoded_t
     X_test_poly = poly_features.fit_transform(X_test.values)
     X_input = poly_features.fit_transform(test.values)
 
-    rr = Ridge(alpha=0.1).fit(X_poly,y_train.values)
+    rr = Ridge(alpha=1).fit(X_poly,y_train.values)
     pred_rr = rr.predict(X_input)
     return pred_rr[0]
 
