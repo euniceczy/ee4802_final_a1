@@ -49,7 +49,7 @@ def my_prediction(data,encoded_month,encoded_flat_type,encoded_storey_range,enco
     df_Xy = df_X.assign(resale_price = y)
     df_y = df_Xy.resale_price
 
-    mask = np.random.rand(len(df_Xy)) <= 0.5
+    mask = np.random.rand(len(df_Xy)) <= 0.8
     X_train = df_X[mask]
     X_test = df_X[~mask]
 
