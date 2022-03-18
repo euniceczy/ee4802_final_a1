@@ -240,4 +240,5 @@ if predict_button==1:
     st.success('Success!')
     st.header('Predicted HDB Resale Price is **SGD$%s**' % estimated_price)
     st.experimental_singleton.clear()
+    st.experimental_memo.clear()
     predict_button=0
