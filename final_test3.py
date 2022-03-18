@@ -16,7 +16,7 @@ def load_data():
     return trim_data
 
 data=load_data()
-# @st.cache 
+@st.cache 
 def my_prediction(data,encoded_month,encoded_flat_type,encoded_storey_range,encoded_town,encoded_flat_model,selected_fa,selected_lease):
     import pandas as pd
     import numpy as np
