@@ -46,7 +46,7 @@ def my_prediction(encoded_month,encoded_flat_type,encoded_storey_range,encoded_t
     y_train = df_y[mask]
     y_test = df_y[~mask]
 
-    poly_features = PolynomialFeatures(degree=2, include_bias=False)
+    poly_features = PolynomialFeatures(degree=1, include_bias=False)
     X_poly = poly_features.fit_transform(X_train.values)
 
     pr = LinearRegression().fit(X_poly, y_train.values)
@@ -73,7 +73,7 @@ def my_prediction(encoded_month,encoded_flat_type,encoded_storey_range,encoded_t
     X_test_poly = poly_features.fit_transform(X_test.values)
     X_input = poly_features.fit_transform(test.values)
 
-    rr = Ridge(alpha=1).fit(X_poly,y_train.values)
+    rr = Ridge(alpha=0.1).fit(X_poly,y_train.values)
     pred_rr = rr.predict(X_input)
     return pred_rr[0]
 
