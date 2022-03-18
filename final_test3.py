@@ -7,9 +7,17 @@ import folium
 
 # import warnings
 # warnings.filterwarnings("ignore")
+DATA_URL = ('https://raw.githubusercontent.com/euniceczy/ee4802_assignment1/master/resale_flat_prices_based_on_registration_date_from_jan_2017_onwards.csv')
 
 @st.cache 
-def my_prediction(encoded_month,encoded_flat_type,encoded_storey_range,encoded_town,encoded_flat_model,selected_fa,selected_lease):
+def load_data():
+    data = pd.read_csv(DATA_URL)
+    trim_data = data.drop(["block", "street_name", "remaining_lease"], axis=1) 
+    return trim_data
+
+data=load_data()
+@st.cache 
+def my_prediction(data,encoded_month,encoded_flat_type,encoded_storey_range,encoded_town,encoded_flat_model,selected_fa,selected_lease):
     import pandas as pd
     import numpy as np
     from sklearn.preprocessing import OrdinalEncoder 
@@ -20,14 +28,14 @@ def my_prediction(encoded_month,encoded_flat_type,encoded_storey_range,encoded_t
     from sklearn.metrics import mean_absolute_error
     from sklearn.linear_model import Ridge
 #     data = pd.read_csv('/resale_flat_prices_based_on_registration_date_from_jan_2017_onwards.csv')
-  
-    data = pd.read_csv('https://raw.githubusercontent.com/euniceczy/ee4802_assignment1/master/resale_flat_prices_based_on_registration_date_from_jan_2017_onwards.csv')
-    trim_data = data.drop(["block", "street_name", "remaining_lease"], axis=1) 
-    trim_data.head(5)
+    
+    # data = pd.read_csv('https://raw.githubusercontent.com/euniceczy/ee4802_assignment1/master/resale_flat_prices_based_on_registration_date_from_jan_2017_onwards.csv')
+    # trim_data = data.drop(["block", "street_name", "remaining_lease"], axis=1) 
+    # trim_data.head(5)
     pipeline = ColumnTransformer([ ("o", OrdinalEncoder(), ["month","flat_type","storey_range"]), ("n", OneHotEncoder(), ["town", "flat_model"]), ], remainder='passthrough')
 
-    X = pipeline.fit_transform(trim_data.drop(["resale_price"], axis=1))
-    y = trim_data["resale_price"]
+    X = pipeline.fit_transform(data.drop(["resale_price"], axis=1))
+    y = data["resale_price"]
 
     col_name = ["month","type","storey","AMK","BED","BIS","BBT","BMH","BPJ",
     "BTM","CEN","CCK","CLE","GEY","HOU","JRE","JRW","KAL","MAR",
@@ -79,7 +87,7 @@ def my_prediction(encoded_month,encoded_flat_type,encoded_storey_range,encoded_t
     pred_rr = rr.predict(X_input)
     return pred_rr[0]
 
-data = pd.read_csv('https://raw.githubusercontent.com/euniceczy/ee4802_assignment1/master/resale_flat_prices_based_on_registration_date_from_jan_2017_onwards.csv')
+# data = pd.read_csv('https://raw.githubusercontent.com/euniceczy/ee4802_assignment1/master/resale_flat_prices_based_on_registration_date_from_jan_2017_onwards.csv')
       
 #TITLE
 st.title("EE4802 Assignment 1 HDB Price Prediction")
@@ -227,7 +235,7 @@ if st.button('Predict'):
 
 #############BUTTON PREDICT
 if predict_button==1:
-    estimated_price = my_prediction(encoded_month,encoded_flat_type,encoded_storey_range,encoded_town,encoded_flat_model,selected_fa,selected_lease)
+    estimated_price = my_prediction(data,encoded_month,encoded_flat_type,encoded_storey_range,encoded_town,encoded_flat_model,selected_fa,selected_lease)
     estimated_price = '{:,.2f}'.format(estimated_price)
     st.success('Success!')
     st.header('Predicted HDB Resale Price is **SGD$%s**' % estimated_price)
